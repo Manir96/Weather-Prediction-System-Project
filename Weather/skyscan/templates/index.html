@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Weather</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{% static 'images/w.png' %}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Signika:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .content-wrapper {
+            flex: 1;
+        }
+
+        footer {
+            background-color: rgb(14, 138, 138);
+            padding: 15px 23px;
+            color: #fff;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body class="container py-4">
+    <div class="content-wrapper">
+        <div class="text-center mb-4">
+            <h1 class="display-4">Sky Scan</h1>
+        </div>
+    
+        <form method="post" class="mb-4">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" name="location" class="form-control" placeholder="Enter location (e.g., City name)">
+                <button type="submit" class="btn btn-primary" style="
+                background-color: rgb(14, 138, 138);" >Check</button>
+            </div>
+        </form>
+    
+        {% if error_msg %}
+            <div class="alert alert-danger" role="alert">
+                {{ error_msg }}
+            </div>
+        {% endif %}
+    
+        {% if location %}
+            <div class="card mb-4 wbg">
+                <div class="card-header text-center hbg">
+                    Current Weather
+                </div>
+                <div class="card-body text-center cw">
+                    <p class="card-text">Location: {{ location }}</p>
+                    <p class="card-text">Temperature: {{ temperature }}</p>
+                    <p class="card-text">Condition: {{ condition }}</p>
+                    <p class="card-text">Wind Speed: {{ wind_speed }}</p>
+                    <p class="card-text">Pressure: {{ pressure }}</p>
+                    <p class="card-text">Humidity: {{ humidity }}</p>
+                    <p class="card-text">Feels Like: {{ feels_like }}</p>
+                </div>
+            </div>
+    
+            <h2 class="mb-3 text-center">Next 2 Days Forecast</h2>
+            <hr class="mb-4">
+    
+            <div class="row row-cols-1 row-cols-md-2 g-6">
+                {% for day_data in forecast_data %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header text-center hbg">
+                            Date: {{ day_data.date }}
+                        </div>
+                        <div class="card-body text-center nw wbg">
+                            <p class="card-text">Temperature: {{ day_data.temperature }}</p>
+                            <p class="card-text">Condition: {{ day_data.condition }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    
+    </div>
+    <footer>
+        <span>Created By <a href="https://github.com/Manir96" target="_blank">MANIRUZZAMAN</a> | &copy; 2023 All rights reserved.</span>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
